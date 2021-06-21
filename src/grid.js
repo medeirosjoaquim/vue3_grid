@@ -5,7 +5,7 @@ export const makeGrid = (cols, rows) => {
     for (let j = 0; j < cols; j++) {
       // with object
       //grid[i].push({x: i, y: j})
-      grid[i].push([i, j])
+      grid[i].push([j, i])
     }
   }
   return grid
