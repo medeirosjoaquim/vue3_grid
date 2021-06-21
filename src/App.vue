@@ -1,74 +1,95 @@
 <template lang="pug">
 #app
-  h1 VueGrid
+  .title 
+    span VueGrid
+  //- h1 {{JSON.stringify(grid)}}
   .container
     .row(v-for="row in grid")
       .cell(v-for="col in row")
         span
   .grid__control
-    h2 Grid Size
-    input#cols(type="range", min="1", max="10", v-model="cols")
-    input#rows(type="range", min="1", max="10", v-model="rows")
+    div
+      h2 Grid Size
+    div  
+      label(for="cols") cols
+      input#cols(type="range", min="1", max="8", v-model="cols" v-on:change="updateGrid")
+      span {{cols}}
+    div
+      label(for="cols") rows
+      input#rows(type="range", min="1", max="8", v-model="rows" v-on:change="updateGrid")
+      span {{rows}}
+      
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onUpdated, onBeforeUpdate } from "vue"
 
-import { makeGrid } from "./grid";
+import { makeGrid } from "./grid"
 
-const cols = ref(2);
-const rows = ref(2);
-const grid = makeGrid(cols, rows);
+const cols = ref(2)
+const rows = ref(2)
+let grid = ref(makeGrid(cols.value, rows.value))
+
+onBeforeUpdate(
+  () => {
+    grid.value = makeGrid(cols.value, rows.value)
+  }
+)
+
 </script>
 
 <style lang="stylus">
+
 body, h1, h2 {
-  margin: 0;
+  margin: 0
 }
 
-* {
-  box-sizing: border-box;
-}
+* 
+  box-sizing: border-box
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #e9c46a;
-  height: 100vh;
-  background-color: #264653;
-}
+#app 
+  font-family: Avenir, Helvetica, Arial, sans-serif
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  color: #e9c46a
+  height: 100vh
+  background-color: #264653
+  overflow hidden
+  .title
+    margin-top 1rem
+    text-align: center
+    span
+      font-size 32px
 
-.container {
-  background-color: #023047;
-  margin-top: 2rem;
-  padding: 2rem;
-}
+.container 
+  background-color: #023047
+  height 36rem
+  overflow hidden 
 
-.row {
+.row 
   // background-color #666
-  margin: 12px auto;
-  width: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  margin: 12px auto
+  width: 200px
+  display: flex
+  align-items: center
+  justify-content: center
 
-.cell {
-  border: 1px solid #2a9d8f;
-  margin: 12px;
-  min-height: 2rem;
-  min-width: 2rem;
-  cursor: pointer;
+.cell 
+  border: 1px solid #2a9d8f
+  margin: 8px
+  min-height: 2rem
+  min-width: 2rem
+  cursor: pointer
 
-  &:hover {
-    background-color: #457b9d;
-    border: none;
-  }
-}
+  &:hover 
+    background-color: #457b9d
+    border: none
 
-.grid__control {
-  background-color: #000814;
-}
+.grid__control 
+  display flex
+  flex-direction column
+  height 8rem
+  padding 1.5rem
+  background-color: #000814
+  
 </style>

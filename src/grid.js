@@ -11,6 +11,5 @@ export const makeGrid = (cols, rows) => {
   return grid
 }
 
-console.log(makeGrid(4,3))
 
 
