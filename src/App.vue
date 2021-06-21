@@ -73,17 +73,33 @@ body, h1, h2 {
   display: flex
   align-items: center
   justify-content: center
-
+  &:not(:last-child)
+    .cell
+      &:before
+        position absolute
+        content ""
+        top 2rem
+        left 1rem
+        border-left  2px solid red
+        height  1.75rem
+        background-color red
 .cell 
+  position relative
   border: 1px solid #2a9d8f
   margin: 8px
   min-height: 2rem
   min-width: 2rem
   cursor: pointer
-
+  &:not(:last-child):after
+    position absolute
+    content ""
+    top .8rem
+    left 2rem
+    border-top  2px solid white
+    width 1rem
+  
   &:hover 
     background-color: #457b9d
-    border: none
 
 .grid__control 
   display flex
