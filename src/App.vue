@@ -2,49 +2,65 @@
 #app
   .title 
     span VueGrid
+  h1 works
+  pre {{map}}
   //- h1 {{JSON.stringify(grid)}}
   .container
-    .row(v-for="row in grid")
-      .cell(v-for="col in row" v-on:click="getCell(col)")
+    .row(v-for="(row, rowIndex) in grid")
+      .cell(v-for="(col, colIndex) in row" v-on:click="setCell(rowIndex, colIndex)")
         span
   .grid__control
     div
       h2 Grid Size
     .controllers
       div  
-        label(for="cols") cols
+        label(for="cols").sub-title cols
         input#cols(type="range", 
           min="1", 
-          max="8", 
+          max="6", 
           v-model="cols" 
           v-on:change="updateGrid")
         span {{cols}}
       div
-        label(for="cols") rows
+        label(for="cols").sub-title rows
         input#rows(type="range", 
           min="1", 
-          max="8", 
+          max="4", 
           v-model="rows" 
           v-on:change="updateGrid")
         span {{rows}}
-      
+  
 </template>
 
 <script setup>
-import { ref, onUpdated, onBeforeUpdate } from "vue"
+import { ref, onUpdated, onBeforeUpdate, reactive } from "vue"
 
 import { makeGrid } from "./grid"
-
+const map = reactive([])
 const cols = ref(2)
 const rows = ref(2)
+for (let i = 0; i < rows.value; i++) {
+      if (!map[i]) {
+        map[i] = []
+      }
+    }
 let grid = ref(makeGrid(cols.value, rows.value))
-const getCell = (col) => {
+const setCell = (rowIndex, colIndex) =>  {
+  console.log({rowIndex, colIndex})
+  map[rowIndex][colIndex] = true
+}
+const getCell = (row, col) => {
   const [x,y] = col
   console.log({x,y})
 }
 onBeforeUpdate(
   () => {
     grid.value = makeGrid(cols.value, rows.value)
+    for (let i = 0; i < rows.value; i++) {
+      if (!map[i]) {
+        map[i] = []
+      }
+    }
   }
 )
 
@@ -75,7 +91,7 @@ body, h1, h2 {
 
 .container 
   background-color: #023047
-  height 36rem
+  min-height 24rem
   overflow hidden 
 
 .row 
@@ -116,6 +132,9 @@ body, h1, h2 {
     background-color: #457b9d
 
 .grid__control 
+  position absolute
+  bottom 0
+  width 100%
   display flex
   flex-direction column
   height 8rem
@@ -123,6 +142,14 @@ body, h1, h2 {
   background-color: #000814
   .controllers
     display flex
+  .sub-title
+    margin 16px
+    font-size 16px
+
+
+
+
+
 
   
 </style>
